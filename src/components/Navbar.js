@@ -1,69 +1,91 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-function Navbar(props) {
-  return (
-    <nav className="nav">
-      <div className="left-div">
-        <Link to="/">
-          <img
-            src="https://ninjasfiles.s3.amazonaws.com/0000000000003454.png"
-            alt="logo"
-          />
-        </Link>
-      </div>
-      <div className="search-container">
-        <img
-          className="search-icon"
-          src="https://image.flaticon.com/icons/svg/483/483356.svg"
-          alt="search-icon"
-        />
-        <input placeholder="Search" />
+import { logoutUser } from '../actions/auth';
 
-        <div className="search-results">
-          <ul>
-            <li className="search-results-row">
-              <img
-                src="https://icon-library.com/images/avatar-icon/avatar-icon-4.jpg"
-                alt="user-dp"
-              />
-              <span>John Doe</span>
-            </li>
-            <li className="search-results-row">
-              <img
-                src="https://icon-library.com/images/avatar-icon/avatar-icon-4.jpg"
-                alt="user-dp"
-              />
-              <span>John Doe</span>
-            </li>
-          </ul>
+class Navbar extends React.Component {
+  logOut = () => {
+    localStorage.removeItem('token');
+    this.props.dispatch(logoutUser());
+  };
+
+  render() {
+    const { auth } = this.props;
+    return (
+      <nav className="nav">
+        <div className="left-div">
+          <Link to="/">
+            <img
+              src="https://ninjasfiles.s3.amazonaws.com/0000000000003454.png"
+              alt="logo"
+            />
+          </Link>
         </div>
-      </div>
-      <div className="right-nav">
-        <div className="user">
+        <div className="search-container">
           <img
-            src="https://pro2-bar-s3-cdn-cf1.myportfolio.com/591d04f256aa901b6f95d035a778faaa/2d2c8973-71ac-4033-b06b-4ceb92aed1ef_rw_600.gif?h=2c3e6e39b34c7335b10b5bcc190c114e"
-            alt="user-dp"
-            id="user-dp"
+            className="search-icon"
+            src="https://image.flaticon.com/icons/svg/483/483356.svg"
+            alt="search-icon"
           />
-          <span>John Doe</span>
+          <input placeholder="Search" />
+
+          <div className="search-results">
+            <ul>
+              <li className="search-results-row">
+                <img
+                  src="https://icon-library.com/images/avatar-icon/avatar-icon-4.jpg"
+                  alt="user-dp"
+                />
+                <span>John Doe</span>
+              </li>
+              <li className="search-results-row">
+                <img
+                  src="https://icon-library.com/images/avatar-icon/avatar-icon-4.jpg"
+                  alt="user-dp"
+                />
+                <span>John Doe</span>
+              </li>
+            </ul>
+          </div>
         </div>
-        <div className="nav-links">
-          <ul>
-            <li>
-              <Link to="/login">Log in</Link>
-            </li>
-            <li>
-              <Link to="/logout">Log out</Link>
-            </li>
-            <li>
-              <Link to="/signup">Register</Link>
-            </li>
-          </ul>
+        <div className="right-nav">
+          {auth.isLoggedin && (
+            <div className="user">
+              <img
+                src="https://pro2-bar-s3-cdn-cf1.myportfolio.com/591d04f256aa901b6f95d035a778faaa/2d2c8973-71ac-4033-b06b-4ceb92aed1ef_rw_600.gif?h=2c3e6e39b34c7335b10b5bcc190c114e"
+                alt="user-dp"
+                id="user-dp"
+              />
+              <span>{auth.user.name}</span>
+            </div>
+          )}
+          
+          <div className="nav-links">
+            <ul>
+              {!auth.isLoggedin && (
+                <li>
+                  <Link to="/login">Log in</Link>
+                </li>
+              )}
+
+              {auth.isLoggedin && <li onClick={this.logOut}>Log out</li>}
+
+              {!auth.isLoggedin && (
+                <li>
+                  <Link to="/signup">Register</Link>
+                </li>
+              )}
+            </ul>
+          </div>
         </div>
-      </div>
-    </nav>
-  );
+      </nav>
+    );
+  }
 }
-
-export default Navbar;
+function mapStateToProps(state) {
+  return {
+    auth: state.auth,
+  };
+}
+export default connect(mapStateToProps)(Navbar);
