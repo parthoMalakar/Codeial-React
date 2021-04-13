@@ -121,10 +121,10 @@ export function signupSuccessful(user) {
   };
 }
 
-export function clearAuthState () {
+export function clearAuthState() {
   return {
     type: CLEAR_AUTH_STATE,
-  }
+  };
 }
 
 export function editUserSuccessful(user) {
@@ -156,21 +156,21 @@ export function editUser(name, password, confirmPassword, userId) {
         password,
         confirm_password: confirmPassword,
         id: userId,
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log('data', data);
-        if(data.success) {
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('EDIT_PROFILE_DATA data', data);
+        if (data.success) {
           dispatch(editUserSuccessful(data.data.user));
 
-          if(data.data.token) {
+          if (data.data.token) {
             localStorage.setItem('token', data.data.token);
           }
           return;
         }
 
         dispatch(editUserFailed(data.message));
-      })
-    })
-  }
+      });
+  };
 }

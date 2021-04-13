@@ -7,7 +7,9 @@ import {
   SIGNUP_START,
   SIGNUP_SUCCESS,
   SIGNUP_FAILED,
-  CLEAR_AUTH_STATE
+  CLEAR_AUTH_STATE,
+  EDIT_USER_SUCCESSFUL,
+  EDIT_USER_FAILED,
 } from '../actions/actionsTypes';
 
 const initialAuthState = {
@@ -20,10 +22,10 @@ const initialAuthState = {
 export default function auth(state = initialAuthState, action) {
   switch (action.type) {
     case CLEAR_AUTH_STATE:
-      return{
+      return {
         ...state,
         error: null,
-      }
+      };
     case LOGIN_START:
     case SIGNUP_START:
       return {
@@ -58,8 +60,18 @@ export default function auth(state = initialAuthState, action) {
         user: {},
         isLoggedin: false,
       };
+    case EDIT_USER_SUCCESSFUL:
+      return {
+        ...state,
+        user: action.user,
+        error: false,
+      };
+    case EDIT_USER_FAILED:
+      return {
+        ...state,
+        error: action.error,
+      };
     default:
       return state;
   }
 }
-
