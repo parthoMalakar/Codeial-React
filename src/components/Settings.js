@@ -50,12 +50,12 @@ class Settings extends React.Component {
           </div>
         )}
         <div className="field">
-          <div className="filed-label">Email</div>
-          <div className="filed-value">{user.email}</div>
+          <div className="field-label">Email</div>
+          <div className="field-value">{user.email}</div>
         </div>
 
         <div className="field">
-          <div className="filed-label">Name</div>
+          <div className="field-label">Name</div>
           {editMode ? (
             <input
               type="text"
@@ -63,13 +63,13 @@ class Settings extends React.Component {
               value={this.state.name}
             />
           ) : (
-            <div className="filed-value">{user.name}</div>
+            <div className="field-value">{user.name}</div>
           )}
         </div>
 
         {editMode && (
           <div className="field">
-            <div className="filed-label">New Password</div>
+            <div className="field-label">New Password</div>
 
             <input
               type="password"
@@ -81,7 +81,7 @@ class Settings extends React.Component {
 
         {editMode && (
           <div className="field">
-            <div className="filed-label">Confirm Password</div>
+            <div className="field-label">Confirm Password</div>
 
             <input
               type="password"
