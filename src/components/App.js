@@ -76,7 +76,7 @@ class App extends React.Component {
               isLoggedin={auth.isLoggedin}
             />
              <PrivateRoute
-              path="/user"
+              path="/user/:userId"
               component={UserProfile}
               isLoggedin={auth.isLoggedin}
             />

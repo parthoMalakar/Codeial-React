@@ -22,9 +22,7 @@ class Settings extends React.Component {
     const { password, confirmPassword, name } = this.state;
     const { user } = this.props.auth;
 
-    this.props.dispatch(
-      editUser(name, password, confirmPassword, user._id)
-    );
+    this.props.dispatch(editUser(name, password, confirmPassword, user._id));
   };
 
   componentWillUnmount() {
