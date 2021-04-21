@@ -1,5 +1,5 @@
-import { ADD_POST, UPDATE_POSTS } from './actionsTypes';
-import { APIUrls } from '../helpers/urls'
+import { UPDATE_POSTS, ADD_POST, ADD_COMMENT } from './actionsTypes';
+import { APIUrls } from '../helpers/urls';
 import { getAuthTokenFromLocalStorage, getFormBody } from '../helpers/utils';
 
 export function fetchPosts() {
@@ -7,7 +7,6 @@ export function fetchPosts() {
     const url = APIUrls.fetchPosts();
     fetch(url)
       .then((response) => {
-        console.log('response', response);
         return response.json();
       })
       .then((data) => {
@@ -18,10 +17,10 @@ export function fetchPosts() {
 }
 
 export function updatePosts(posts) {
-    return {
-       type: UPDATE_POSTS,
-       posts
-    }
+  return {
+    type: UPDATE_POSTS,
+    posts,
+  };
 }
 
 export function addPost(post) {
@@ -45,11 +44,39 @@ export function createPost(content) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log('DATA', data);
+        console.log('dATA', data);
 
         if (data.success) {
           dispatch(addPost(data.data.post));
         }
       });
+  };
+}
+
+export function createComment(content, postId) {
+  return (dispatch) => {
+    const url = APIUrls.createComment();
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: `Bearer ${getAuthTokenFromLocalStorage()}`,
+      },
+      body: getFormBody({ content, post_id: postId }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          dispatch(addComment(data.data.comment, postId));
+        }
+      });
+  };
+}
+
+export function addComment(comment, postId) {
+  return {
+    type: ADD_COMMENT,
+    comment,
+    postId,
   };
 }
