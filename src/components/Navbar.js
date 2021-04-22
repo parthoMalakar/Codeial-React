@@ -73,11 +73,11 @@ class Navbar extends React.Component {
             <ul>
               {!auth.isLoggedin && (
                 <li>
-                  <Link to="/login">Log in</Link>
+                  <Link to="/login">Log In</Link>
                 </li>
               )}
 
-              {auth.isLoggedin && <li onClick={this.logOut}>Log out</li>}
+              {auth.isLoggedin && <li onClick={this.logOut}>Log Out</li>}
 
               {!auth.isLoggedin && (
                 <li>
