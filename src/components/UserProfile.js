@@ -11,13 +11,33 @@ class UserProfile extends Component {
     this.state = {
       success: null,
       error: null,
+      successMessage: null,
     };
   }
   componentDidMount() {
     const { match } = this.props;
+
     if (match.params.userId) {
       // dispatch an action
       this.props.dispatch(fetchUserProfile(match.params.userId));
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    const {
+      match: { params: prevParams },
+    } = prevProps;
+
+    const {
+      match: { params: currentParams },
+    } = this.props;
+
+    if (
+      prevParams &&
+      currentParams &&
+      prevParams.userId !== currentParams.userId
+    ) {
+      this.props.dispatch(fetchUserProfile(currentParams.userId));
     }
   }
 
@@ -46,13 +66,14 @@ class UserProfile extends Component {
         Authorization: `Bearer ${getAuthTokenFromLocalStorage()}`,
       },
     };
+
     const response = await fetch(url, options);
     const data = await response.json();
 
     if (data.success) {
       this.setState({
         success: true,
-        successMessage: 'Added friend successfully',
+        successMessage: 'Added friend successfully!',
       });
 
       this.props.dispatch(addFriend(data.data.friendship));
@@ -85,7 +106,7 @@ class UserProfile extends Component {
       // show user message
       this.setState({
         success: true,
-        successMessage: 'Remove friends successfully!',
+        successMessage: 'Removed friends successfully!',
       });
       this.props.dispatch(removeFriend(match.params.userId));
     } else {
@@ -105,7 +126,7 @@ class UserProfile extends Component {
     const user = profile.user;
 
     if (profile.inProgress) {
-      return <h1>Loading....</h1>;
+      return <h1>Loading!</h1>;
     }
 
     const isUserAFriend = this.checkIfUserIsAFriend();
@@ -162,5 +183,4 @@ function mapStateToProps({ profile, friends }) {
     friends,
   };
 }
-
 export default connect(mapStateToProps)(UserProfile);
